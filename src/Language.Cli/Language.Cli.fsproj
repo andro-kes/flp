@@ -8,16 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Language/Core/Diagnostics.fs" />
-    <Compile Include="Language/Core/Ast.fs" />
-    <Compile Include="Language/Core/Tokens.fs" />
-    <Compile Include="Language/Parser/Lexer.fs" />
-    <Compile Include="Language/Parser/Parser.Types.fs" />
-    <Compile Include="Language/Parser/Parser.TernaryRaise.fs" />
-    <Compile Include="Language/Parser/Parser.ArrowLoop.fs" />
-    <Compile Include="Language/Parser/Parser.Expression.fs" />
-    <Compile Include="Language/Runtime/Eval.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="../Language/Core/Diagnostics.fs" />
+    <Compile Include="../Language/Core/Ast.fs" />
+    <Compile Include="../Language/Core/Tokens.fs" />
+    <Compile Include="../Language/Parser/Lexer.fs" />
+    <Compile Include="../Language/Parser/Parser.Types.fs" />
+    <Compile Include="../Language/Parser/Parser.TernaryRaise.fs" />
+    <Compile Include="../Language/Parser/Parser.ArrowLoop.fs" />
+    <Compile Include="../Language/Parser/Parser.Expression.fs" />
+    <Compile Include="../Language/Runtime/Eval.fs" />
+    <Compile Include="../Language/CLI/Program.fs" />
   </ItemGroup>
 
 </Project>
