@@ -1,0 +1,4 @@
+(let n 0
+  (begin
+    (-> (< n 3) (set n (+ n 1)))
+    n))

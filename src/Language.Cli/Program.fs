@@ -1,6 +1,8 @@
 module Program
 
-open Language
+open Language.Core
+open Language.Parser
+open Language.Runtime
 
 [<EntryPoint>]
 let main argv =

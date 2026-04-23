@@ -1,6 +1,7 @@
-namespace Language
+namespace Language.Runtime
 
 open System.Collections.Generic
+open Language.Core
 
 type Value =
     | VNumber of int
@@ -46,11 +47,8 @@ module Eval =
         | Number n -> VNumber n
         | Bool b -> VBool b
         | Var x -> env.Get(x)
-
         | If(c, t, f) -> if eval env c |> truthy then eval env t else eval env f
-
         | Lambda(arg, body) -> VClosure(arg, body, env)
-
         | App(fexp, aexp) ->
             let fv = eval env fexp
             let av = eval env aexp
@@ -61,35 +59,29 @@ module Eval =
                 eval callEnv body
             | VPrim p -> p av
             | _ -> failwith "Attempt to call a non-function value"
-
         | Let(name, value, body) ->
             let v = eval env value
             let env2 = Env.extend env
             env2.Define(name, v)
             eval env2 body
-
         | LetRec(fname, arg, fbody, inExpr) ->
             let env2 = Env.extend env
             env2.Define(fname, VUnit)
             let closure = VClosure(arg, fbody, env2)
             env2.Set(fname, closure)
             eval env2 inExpr
-
         | Set(name, value) ->
             let v = eval env value
             env.Set(name, v)
             VUnit
-
         | Raise e ->
             let v = eval env e
             raise (LangError { Message = $"Raised: %A{v}" })
-
         | ArrowLoop(cond, body) ->
             let mutable last = VUnit
             while eval env cond |> truthy do
                 last <- eval env body
             last
-
         | Seq exprs ->
             let mutable last = VUnit
             for e in exprs do
