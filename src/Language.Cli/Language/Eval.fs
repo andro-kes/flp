@@ -119,6 +119,10 @@ module Eval =
             match a, b with
             | VNumber x, VNumber y -> VBool(x < y)
             | _ -> failwith "'<' expects two numbers")))
+        env.Define(">", VPrim(fun a -> VPrim(fun b ->
+            match a, b with
+            | VNumber x, VNumber y -> VBool(x > y)
+            | _ -> failwith "'>' expects two numbers")))
         env.Define("not", VPrim(fun a ->
             match a with
             | VBool b -> VBool(not b)

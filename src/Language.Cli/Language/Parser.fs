@@ -9,12 +9,14 @@ module Parser =
         | SRaise of Sexp
 
     let private parseSexps (tokens: Token list) : Sexp list =
-        let rec parseOne (toks: Token list) : Sexp * Token list =
+        // parsePrimary parses a single atom, raise-prefix, or parenthesised list.
+        // parseOne then checks whether a `?` follows and promotes it to STernary.
+        let rec parsePrimary (toks: Token list) : Sexp * Token list =
             match toks with
             | [] -> failwith "Unexpected end of input"
 
             | Bang :: rest ->
-                let (node, tail) = parseOne rest
+                let (node, tail) = parsePrimary rest
                 (SRaise node, tail)
 
             | LParen :: rest ->
@@ -28,20 +30,21 @@ module Parser =
                 parseList [] rest
 
             | RParen :: _ -> failwith "Unexpected ')'"
+            | Atom a :: rest -> (SAtom a, rest)
+            | Question :: _ -> failwith "Unexpected '?'"
+            | Colon :: _ -> failwith "Unexpected ':'"
 
-            | Atom a :: Question :: rest ->
-                let cond = SAtom a
-                let (tBranch, afterT) = parseOne rest
+        and parseOne (toks: Token list) : Sexp * Token list =
+            let (cond, rest) = parsePrimary toks
+            match rest with
+            | Question :: afterQ ->
+                let (tBranch, afterT) = parseOne afterQ
                 match afterT with
                 | Colon :: afterColon ->
                     let (fBranch, tail) = parseOne afterColon
                     (STernary(cond, tBranch, fBranch), tail)
                 | _ -> failwith "Expected ':' after then-branch in ternary expression"
-
-            | Atom a :: rest -> (SAtom a, rest)
-
-            | Question :: _ -> failwith "Unexpected '?'"
-            | Colon :: _ -> failwith "Unexpected ':'"
+            | _ -> (cond, rest)
 
         let rec loop acc ts =
             match ts with
