@@ -1,6 +1,7 @@
-namespace Language
+namespace Language.Parser
 
 open System
+open Language.Core
 
 module Lexer =
     let private isWhitespace (c: char) = Char.IsWhiteSpace c

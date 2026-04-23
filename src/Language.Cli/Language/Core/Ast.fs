@@ -1,4 +1,4 @@
-namespace Language
+namespace Language.Core
 
 type Expr =
     | Number of int

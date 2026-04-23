@@ -1,4 +1,4 @@
-namespace Language
+namespace Language.Core
 
 type Error = { Message: string }
 
